@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encurtador URL</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/globals.css}">
+</head>
+<body>
+<div class="floating-elements">
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+</div>
+
+<div class="container">
+    <header>
+        <h1><i class="fas fa-link"></i> Encurtador de URLs</h1>
+        <p class="subtitle">Transforme URLs longas em links curtos e elegantes</p>
+    </header>
+
+    <main>
+        <div class="card">
+            <form action="/encurtar" method="post">
+                <div class="form-group">
+                    <label for="urlOriginal">Cole sua URL aqui:</label>
+                    <div class="input-container">
+                        <i class="fas fa-globe input-icon"></i>
+                        <input type="url" id="urlOriginal" name="urlOriginal"
+                               placeholder="https://exemplo.com/sua-url-muito-longa" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn">
+                    <i class="fas fa-compress-alt"></i> Encurtar URL
+                </button>
+            </form>
+
+            <div id="resultado" class="resultado" th:if="${urlEncurtada}" th:classappend="show">
+                <h3><i class="fas fa-check-circle"></i> URL Encurtada com Sucesso!</h3>
+                <div class="url-result">
+                    <a th:href="${urlEncurtada}" th:text="${urlEncurtada}" id="urlEncurtada" target="_blank">URL Encurtada</a>
+                    <button class="copy-btn" onclick="copyUrl()">
+                        <i class="fas fa-copy"></i> Copiar
+                    </button>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number" th:text="${reducaoPercentual != null ? reducaoPercentual + '%' : 'N/A'}">0%</div>
+                        <div class="stat-label">Redução</div>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-number">Hoje</div>
+                        <div class="stat-label">Criado</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    function copyUrl() {
+        const urlElement = document.getElementById('urlEncurtada');
+        const url = urlElement.textContent || urlElement.innerText;
+
+        navigator.clipboard.writeText(url).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+            btn.style.background = '#28a745';
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = '#667eea';
+            }, 2000);
+        }).catch(err => {
+            // Fallback para navegadores mais antigos
+            const textArea = document.createElement('textarea');
+            textArea.value = url;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            const btn = document.querySelector('.copy-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+            btn.style.background = '#28a745';
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = '#667eea';
+            }, 2000);
+        });
+    }
+
+    // Adicionar efeito de typing no placeholder
+    const input = document.getElementById('urlOriginal');
+    const placeholders = [
+        'https://exemplo.com/sua-url-muito-longa',
+        'https://site.com/artigo-interessante',
+        'https://loja.com/produto/descricao-detalhada'
+    ];
+
+    let currentPlaceholder = 0;
+
+    function changePlaceholder() {
+        input.placeholder = placeholders[currentPlaceholder];
+        currentPlaceholder = (currentPlaceholder + 1) % placeholders.length;
+    }
+
+    setInterval(changePlaceholder, 3000);
+</script>
+</body>
+</html>
