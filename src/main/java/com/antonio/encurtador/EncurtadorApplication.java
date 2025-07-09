@@ -4,6 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+// proximo passo mudar para PostgreSQL
+
 @SpringBootApplication
 @EnableScheduling
 public class EncurtadorApplication {

@@ -21,10 +21,6 @@ public class FrontEndController {
         return "index";
     }
 
-    @GetMapping("/erro")
-    public String erro() {
-        return "erro";
-    }
 
     @PostMapping("/encurtar")
     private String encurtarUrl (@RequestParam("urlOriginal") String urlOriginal,
@@ -44,6 +40,8 @@ public class FrontEndController {
         return "index";
     }
 
-
-
+    @GetMapping("/error")
+    public String error() {
+        return "erro";
+    }
 }
