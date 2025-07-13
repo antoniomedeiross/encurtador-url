@@ -1,14 +1,17 @@
-# Usa uma imagem base leve com Java
+# Etapa 1: build da aplicação
+FROM eclipse-temurin:21-jdk-alpine AS build
+
+WORKDIR /app
+COPY . .
+
+RUN ./mvnw clean package -DskipTests
+
+# Etapa 2: imagem final com o jar
 FROM eclipse-temurin:21-jdk-alpine
 
-# Define a pasta de trabalho dentro do container
 WORKDIR /app
+COPY --from=build /app/target/encurtador-0.0.1-SNAPSHOT.jar app.jar
 
-# Copia o arquivo .jar para dentro do container
-COPY target/encurtador-0.0.1-SNAPSHOT.jar app.jar
-
-# Expõe a porta que o Spring Boot usa
 EXPOSE 8080
 
-# Comando que roda o app
 CMD ["java", "-jar", "app.jar"]
