@@ -4,7 +4,7 @@ FROM eclipse-temurin:21-jdk-alpine AS build
 WORKDIR /app
 COPY . .
 
-RUN ./mvnw clean package -DskipTests
+RUN ./mvnw clean package
 
 # Etapa 2: imagem final com o jar
 FROM eclipse-temurin:21-jdk-alpine
